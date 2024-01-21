@@ -13,8 +13,8 @@ return {
     -- the colorscheme should be available when starting Neovim
     {
         'folke/tokyonight.nvim', -- 'folke/tokyonight.nvim'
-        lazy = false, -- make sure we load this during startup if it is your main colorscheme
-        priority = 1000, -- make sure to load this before all the other start plugins
+        lazy = false,            -- make sure we load this during startup if it is your main colorscheme
+        priority = 1000,         -- make sure to load this before all the other start plugins
         enable = true,
         config = function()
             -- load the colorscheme here
@@ -24,63 +24,78 @@ return {
 
     {
         "nvim-neo-tree/neo-tree.nvim",
-		version = "3.5",
+        version = "3.5",
         enable = false,
-		opts = {
-			close_if_last_window = true,
-			sources = { "filesystem", "buffers", "git_status", "document_symbols" },
-			open_files_do_not_replace_types = { "terminal", "Trouble", "trouble", "qf", "Outline" },
-			window = {
-				mappings = {
-					["<space>"] = "none",
-				},
-			},
-			default_component_configs = {
-				indent = {
-					with_expanders = true, -- if nil and file nesting is enabled, will enable expanders
-					expander_collapsed = "",
-					expander_expanded = "",
-					expander_highlight = "NeoTreeExpander",
-				},
-			},
-			filesystem = {
-				bind_to_cwd = false,
-				use_libuv_file_watcher = true,
-				follow_current_file = {
-					enabled = true, -- This will find and focus the file in the active buffer every time
-					-- the current file is changed while the tree is open.
-					leave_dirs_open = true, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
-				},
-			},
-			buffers = {
-				follow_current_file = { enabled = true }
-			},
-			document_symbols = {
-				follow_cursor = true,
-				renderers = {
-					root = {
-						{ "icon", default = "C" },
-						{ "name", zindex = 10 },
-					},
-					symbol = {
-						{ "indent",    with_expanders = true },
-						{ "kind_icon", default = "?" },
-						{
-							"container",
-							content = {
-								{ "name", zindex = 10 },
-							}
-						}
-					},
-				},
-				window = {
-					mappings = {
-						["<cr>"] = "jump_to_symbol",
-						["<2-LeftMouse>"] = "jump_to_symbol",
-					}
-				}
-			}
-		},
+        opts = {
+            close_if_last_window = true,
+            sources = { "filesystem", "buffers", "git_status", "document_symbols" },
+            open_files_do_not_replace_types = { "terminal", "Trouble", "trouble", "qf", "Outline" },
+            window = {
+                mappings = {
+                    ["<space>"] = "none",
+                },
+            },
+            default_component_configs = {
+                indent = {
+                    with_expanders = true, -- if nil and file nesting is enabled, will enable expanders
+                    expander_collapsed = "",
+                    expander_expanded = "",
+                    expander_highlight = "NeoTreeExpander",
+                },
+                git_status = {
+                    symbols = {
+                        -- Change type
+                        added     = "✚", -- or "✚", but this is redundant info if you use git_status_colors on the name
+                        modified  = "", -- or "", but this is redundant info if you use git_status_colors on the name
+                        deleted   = "✖",-- this can only be used in the git_status source
+                        renamed   = "󰁕",-- this can only be used in the git_status source
+                        -- Status type
+                        untracked = "",
+                        ignored   = "",
+                        unstaged  = "󰄱",
+                        staged    = "",
+                        conflict  = "",
+                    }
+                },
+            },
+            filesystem = {
+                bind_to_cwd = false,
+                use_libuv_file_watcher = true,
+                follow_current_file = {
+                    enabled = true,         -- This will find and focus the file in the active buffer every time
+                    -- the current file is changed while the tree is open.
+                    leave_dirs_open = true, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+                },
+            },
+            buffers = {
+                follow_current_file = { enabled = true }
+            },
+            document_symbols = {
+                follow_cursor = true,
+                renderers = {
+                    root = {
+                        { "icon", default = "C" },
+                        { "name", zindex = 10 },
+                    },
+                    symbol = {
+                        { "indent",    with_expanders = true },
+                        { "kind_icon", default = "?" },
+                        {
+                            "container",
+                            content = {
+                                { "name", zindex = 10 },
+                            }
+                        }
+                    },
+                },
+                window = {
+                    mappings = {
+                        ["<cr>"] = "jump_to_symbol",
+                        ["<2-LeftMouse>"] = "jump_to_symbol",
+                    }
+                }
+            }
+        },
         config = function()
             vim.g.loaded_netrw = 1
             vim.g.loaded_netrwPlugin = 1
@@ -90,27 +105,27 @@ return {
                     vim.cmd('wincmd l')
                     return
                 end
-				require("neo-tree.command").execute({
+                require("neo-tree.command").execute({
                     open = true,
                     source = 'filesystem',
                     dir = vim.loop.cwd(),
-				})
+                })
             end, { desc = 'Toggle Active Window', noremap = true })
         end
 
     },
 
-	{
-		"folke/flash.nvim",
-		keys = {
-			-- disable the default flash keymap
-			{ "s", mode = { "n", "x", "o" }, false },
-			{ "S", mode = { "n", "x", "o" }, false },
-		},
-	},
+    {
+        "folke/flash.nvim",
+        keys = {
+            -- disable the default flash keymap
+            { "s", mode = { "n", "x", "o" }, false },
+            { "S", mode = { "n", "x", "o" }, false },
+        },
+    },
 
-	{
-		"echasnovski/mini.bufremove",
+    {
+        "echasnovski/mini.bufremove",
         event = "VeryLazy",
         config = function()
             vim.g.CloseWindow = function()
@@ -136,9 +151,10 @@ return {
             end
 
             vim.cmd("cnoreabbrev <expr> q getcmdtype() == ':' && getcmdline() == 'q' ? 'call g:CloseWindow()<CR>' : 'q'")
-            vim.cmd("cnoreabbrev <expr> x getcmdtype() == ':' && getcmdline() == 'x' ? 'w<CR>call g:CloseWindow()<CR>' : 'x'")
+            vim.cmd(
+                "cnoreabbrev <expr> x getcmdtype() == ':' && getcmdline() == 'x' ? 'w<CR>call g:CloseWindow()<CR>' : 'x'")
         end,
-	},
+    },
 
     {
         'bufferline.nvim',
@@ -154,41 +170,89 @@ return {
 
     {
         'nvim-treesitter',
+        opts = {
+            highlight = { enable = true },
+            indent = { enable = true },
+            ensure_installed = {
+                "bash",
+                "c",
+                "diff",
+                "html",
+                "javascript",
+                "jsdoc",
+                "json",
+                "jsonc",
+                "lua",
+                "luadoc",
+                "luap",
+                "markdown",
+                "markdown_inline",
+                "python",
+                "query",
+                "regex",
+                "toml",
+                "tsx",
+                "typescript",
+                "vim",
+                "vimdoc",
+                "yaml",
+            },
+            incremental_selection = {
+                enable = true,
+                keymaps = {
+                    init_selection = "<C-space>",
+                    node_incremental = "<C-space>",
+                    scope_incremental = false,
+                    node_decremental = "<bs>",
+                },
+            },
+            textobjects = {
+                move = {
+                    enable = true,
+                    goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer" },
+                    goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer" },
+                    goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer" },
+                    goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer" },
+                },
+            },
+        },
         config = function()
-            require 'nvim-treesitter.install'.compilers = { "clang" }
+            if vim.fn.has('win32') == 1 then
+                require 'nvim-treesitter.install'.compilers = { "clang" }
+            end
         end
     },
 
-	{
-		"simrat39/symbols-outline.nvim",
-		keys = { { "<leader>cs", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
-		cmd = "SymbolsOutline",
-		opts = function()
-			local Config = require("lazyvim.config")
-			local defaults = require("symbols-outline.config").defaults
-			local opts = {
-				symbols = {},
-				symbol_blacklist = {},
-			}
-			local filter = Config.kind_filter
+    {
+        "simrat39/symbols-outline.nvim",
+        keys = { { "<leader>cs", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
+        cmd = "SymbolsOutline",
+        opts = function()
+            local Config = require("lazyvim.config")
+            local defaults = require("symbols-outline.config").defaults
+            local opts = {
+                symbols = {},
+                symbol_blacklist = {},
+            }
+            local filter = Config.kind_filter
 
-			if type(filter) == "table" then
-				filter = filter.default
-				if type(filter) == "table" then
-					for kind, symbol in pairs(defaults.symbols) do
-						opts.symbols[kind] = {
-							icon = Config.icons.kinds[kind] or symbol.icon,
-							hl = symbol.hl,
-						}
-						if not vim.tbl_contains(filter, kind) then
-							table.insert(opts.symbol_blacklist, kind)
-						end
-					end
-				end
-			end
-			return opts
-		end,
-	}
+            if type(filter) == "table" then
+                filter = filter.default
+                if type(filter) == "table" then
+                    for kind, symbol in pairs(defaults.symbols) do
+                        opts.symbols[kind] = {
+                            icon = Config.icons.kinds[kind] or symbol.icon,
+                            hl = symbol.hl,
+                        }
+                        if not vim.tbl_contains(filter, kind) then
+                            table.insert(opts.symbol_blacklist, kind)
+                        end
+                    end
+                end
+            end
+            return opts
+        end,
+    }
 
 }
 
