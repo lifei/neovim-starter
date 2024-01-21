@@ -1,0 +1,195 @@
+-- since this is just an example spec, don't actually load anything here and return an empty spec
+-- stylua: ignore
+-- if true then return {} end
+
+-- every spec file under the "plugins" directory will be loaded automatically by lazy.nvim
+--
+-- In your plugin files, you can:
+-- * add extra plugins
+-- * disable/enabled LazyVim plugins
+-- * override the configuration of LazyVim plugins
+return {
+
+    -- the colorscheme should be available when starting Neovim
+    {
+        'folke/tokyonight.nvim', -- 'folke/tokyonight.nvim'
+        lazy = false, -- make sure we load this during startup if it is your main colorscheme
+        priority = 1000, -- make sure to load this before all the other start plugins
+        enable = true,
+        config = function()
+            -- load the colorscheme here
+            vim.cmd([[colorscheme tokyonight]])
+        end,
+    },
+
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+		version = "3.5",
+        enable = false,
+		opts = {
+			close_if_last_window = true,
+			sources = { "filesystem", "buffers", "git_status", "document_symbols" },
+			open_files_do_not_replace_types = { "terminal", "Trouble", "trouble", "qf", "Outline" },
+			window = {
+				mappings = {
+					["<space>"] = "none",
+				},
+			},
+			default_component_configs = {
+				indent = {
+					with_expanders = true, -- if nil and file nesting is enabled, will enable expanders
+					expander_collapsed = "",
+					expander_expanded = "",
+					expander_highlight = "NeoTreeExpander",
+				},
+			},
+			filesystem = {
+				bind_to_cwd = false,
+				use_libuv_file_watcher = true,
+				follow_current_file = {
+					enabled = true, -- This will find and focus the file in the active buffer every time
+					-- the current file is changed while the tree is open.
+					leave_dirs_open = true, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+				},
+			},
+			buffers = {
+				follow_current_file = { enabled = true }
+			},
+			document_symbols = {
+				follow_cursor = true,
+				renderers = {
+					root = {
+						{ "icon", default = "C" },
+						{ "name", zindex = 10 },
+					},
+					symbol = {
+						{ "indent",    with_expanders = true },
+						{ "kind_icon", default = "?" },
+						{
+							"container",
+							content = {
+								{ "name", zindex = 10 },
+							}
+						}
+					},
+				},
+				window = {
+					mappings = {
+						["<cr>"] = "jump_to_symbol",
+						["<2-LeftMouse>"] = "jump_to_symbol",
+					}
+				}
+			}
+		},
+        config = function()
+            vim.g.loaded_netrw = 1
+            vim.g.loaded_netrwPlugin = 1
+
+            vim.keymap.set('n', '\\\\', function()
+                if vim.bo.filetype == 'neo-tree' then
+                    vim.cmd('wincmd l')
+                    return
+                end
+				require("neo-tree.command").execute({
+                    open = true,
+                    source = 'filesystem',
+                    dir = vim.loop.cwd(),
+				})
+            end, { desc = 'Toggle Active Window', noremap = true })
+        end
+
+    },
+
+	{
+		"folke/flash.nvim",
+		keys = {
+			-- disable the default flash keymap
+			{ "s", mode = { "n", "x", "o" }, false },
+			{ "S", mode = { "n", "x", "o" }, false },
+		},
+	},
+
+	{
+		"echasnovski/mini.bufremove",
+        event = "VeryLazy",
+        config = function()
+            vim.g.CloseWindow = function()
+                -- 目录窗口，随便关
+                if vim.bo.filetype == 'neo-tree' then
+                    vim.cmd('q')
+                    return
+                end
+
+                -- 只剩下一个buf
+                local bufs = vim.fn.getbufinfo({ buflisted = 1 })
+                local buf_cnt = #bufs
+                if buf_cnt == 1 then
+                    vim.cmd('q')
+                    return
+                end
+
+                if vim.bo.buflisted then
+                    require("mini.bufremove").delete(0)
+                    return
+                end
+                vim.cmd('q')
+            end
+
+            vim.cmd("cnoreabbrev <expr> q getcmdtype() == ':' && getcmdline() == 'q' ? 'call g:CloseWindow()<CR>' : 'q'")
+            vim.cmd("cnoreabbrev <expr> x getcmdtype() == ':' && getcmdline() == 'x' ? 'w<CR>call g:CloseWindow()<CR>' : 'x'")
+        end,
+	},
+
+    {
+        'bufferline.nvim',
+        opts = {
+            options = {
+                indicator = {
+                    icon = '🚩', -- this should be omitted if indicator style is not 'icon'
+                    style = 'icon',
+                },
+            },
+        },
+    },
+
+    {
+        'nvim-treesitter',
+        config = function()
+            require 'nvim-treesitter.install'.compilers = { "clang" }
+        end
+    },
+
+	{
+		"simrat39/symbols-outline.nvim",
+		keys = { { "<leader>cs", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
+		cmd = "SymbolsOutline",
+		opts = function()
+			local Config = require("lazyvim.config")
+			local defaults = require("symbols-outline.config").defaults
+			local opts = {
+				symbols = {},
+				symbol_blacklist = {},
+			}
+			local filter = Config.kind_filter
+
+			if type(filter) == "table" then
+				filter = filter.default
+				if type(filter) == "table" then
+					for kind, symbol in pairs(defaults.symbols) do
+						opts.symbols[kind] = {
+							icon = Config.icons.kinds[kind] or symbol.icon,
+							hl = symbol.hl,
+						}
+						if not vim.tbl_contains(filter, kind) then
+							table.insert(opts.symbol_blacklist, kind)
+						end
+					end
+				end
+			end
+			return opts
+		end,
+	}
+
+}
+
+-- vim600: foldmethod=marker
