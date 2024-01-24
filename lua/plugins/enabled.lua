@@ -252,6 +252,13 @@ return {
             end
             return opts
         end,
+    },
+
+    {
+        "nvim-telescope/telescope.nvim",
+	opts = {
+	    defaults = { history = false },
+	}
     }
 
 }
