@@ -128,7 +128,15 @@ return {
         "echasnovski/mini.bufremove",
         event = "VeryLazy",
         config = function()
-            vim.g.CloseWindow = function()
+            vim.g.CloseWindow = function(idx)
+
+                local cmd
+                if idx == 1 then
+                    cmd = 'q'
+                else
+                    cmd = 'x'
+                end
+
                 -- 目录窗口，随便关
                 if vim.bo.filetype == 'neo-tree' then
                     vim.cmd('q')
@@ -139,20 +147,23 @@ return {
                 local bufs = vim.fn.getbufinfo({ buflisted = 1 })
                 local buf_cnt = #bufs
                 if buf_cnt == 1 then
-                    vim.cmd('q')
+                    vim.cmd(cmd)
                     return
                 end
 
-                if vim.bo.buflisted then
-                    require("mini.bufremove").delete(0)
+                if not vim.bo.buflisted then
+                    vim.cmd(cmd)
                     return
                 end
-                vim.cmd('q')
+                require("mini.bufremove").delete(0)
+                local win_cnt = vim.fn.winnr('$')
+                if win_cnt > 1 then
+                    vim.cmd(cmd)
+                end
             end
 
-            vim.cmd("cnoreabbrev <expr> q getcmdtype() == ':' && getcmdline() == 'q' ? 'call g:CloseWindow()<CR>' : 'q'")
-            vim.cmd(
-                "cnoreabbrev <expr> x getcmdtype() == ':' && getcmdline() == 'x' ? 'w<CR>call g:CloseWindow()<CR>' : 'x'")
+            vim.cmd("cnoreabbrev <expr> q getcmdtype() == ':' && getcmdline() == 'q' ? 'call g:CloseWindow(1)<CR>' : 'q'")
+            vim.cmd("cnoreabbrev <expr> x getcmdtype() == ':' && getcmdline() == 'x' ? 'call g:CloseWindow(2)<CR>' : 'x'")
         end,
     },
 
