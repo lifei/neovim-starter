@@ -267,10 +267,21 @@ return {
 
     {
         "nvim-telescope/telescope.nvim",
-	opts = {
-	    defaults = { history = false },
-	}
-    }
+        opts = {
+            defaults = { history = false },
+        }
+    },
+
+    {
+        "ojroques/nvim-lspfuzzy",
+        requires = {
+            {'junegunn/fzf'},
+            {'junegunn/fzf.vim'},  -- to enable preview (optional)
+        },
+        config = function ()
+            require('lspfuzzy').setup {}
+        end
+    },
 
 }
 
