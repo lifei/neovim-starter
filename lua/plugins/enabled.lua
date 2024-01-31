@@ -26,51 +26,64 @@ return {
         "nvim-neo-tree/neo-tree.nvim",
         version = "3.5",
         enable = false,
-        opts = {
-            close_if_last_window = true,
-            sources = { "filesystem", "buffers", "git_status", "document_symbols" },
-            open_files_do_not_replace_types = { "terminal", "Trouble", "trouble", "qf", "Outline" },
-            window = {
+        config = function(_, opts)
+            vim.g.loaded_netrw = 1
+            vim.g.loaded_netrwPlugin = 1
+
+            vim.keymap.set('n', '\\\\', function()
+                if vim.bo.filetype == 'neo-tree' then
+                    vim.cmd('wincmd l')
+                    return
+                end
+                require("neo-tree.command").execute({
+                    open = true,
+                    source = 'filesystem',
+                    dir = vim.loop.cwd(),
+                })
+            end, { desc = 'Toggle Active Window', noremap = true })
+
+            local function on_move(data)
+                Util.lsp.on_rename(data.source, data.destination)
+            end
+
+            local events = require("neo-tree.events")
+            opts.event_handlers = opts.event_handlers or {}
+            vim.list_extend(opts.event_handlers, {
+                { event = events.FILE_MOVED, handler = on_move },
+                { event = events.FILE_RENAMED, handler = on_move },
+            })
+
+            opts.close_if_last_window = true
+            opts.window = {
+                width = 25,
                 mappings = {
                     ["<space>"] = "none",
+                    ["Y"] = function(state)
+                        local node = state.tree:get_node()
+                        local path = node:get_id()
+                        vim.fn.setreg("+", path, "c")
+                    end,
                 },
-            },
-            default_component_configs = {
-                indent = {
-                    with_expanders = true, -- if nil and file nesting is enabled, will enable expanders
-                    expander_collapsed = "",
-                    expander_expanded = "",
-                    expander_highlight = "NeoTreeExpander",
-                },
-                git_status = {
-                    symbols = {
-                        -- Change type
-                        added     = "✚", -- or "✚", but this is redundant info if you use git_status_colors on the name
-                        modified  = "", -- or "", but this is redundant info if you use git_status_colors on the name
-                        deleted   = "✖",-- this can only be used in the git_status source
-                        renamed   = "󰁕",-- this can only be used in the git_status source
-                        -- Status type
-                        untracked = "",
-                        ignored   = "",
-                        unstaged  = "󰄱",
-                        staged    = "",
-                        conflict  = "",
-                    }
-                },
-            },
-            filesystem = {
-                bind_to_cwd = false,
-                use_libuv_file_watcher = true,
-                follow_current_file = {
-                    enabled = true,         -- This will find and focus the file in the active buffer every time
-                    -- the current file is changed while the tree is open.
-                    leave_dirs_open = true, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
-                },
-            },
-            buffers = {
-                follow_current_file = { enabled = true }
-            },
-            document_symbols = {
+            }
+            opts.default_component_configs.git_status = {
+                symbols = {
+                    -- Change type
+                    added     = "✚", -- or "✚", but this is redundant info if you use git_status_colors on the name
+                    modified  = "", -- or "", but this is redundant info if you use git_status_colors on the name
+                    deleted   = "✖",-- this can only be used in the git_status source
+                    renamed   = "󰁕",-- this can only be used in the git_status source
+                    -- Status type
+                    untracked = "",
+                    ignored   = "",
+                    unstaged  = "󰄱",
+                    staged    = "",
+                    conflict  = "",
+                }
+            }
+
+            opts.filesystem.follow_current_file.leave_dirs_open = true
+            opts.buffers = { follow_current_file = { enabled = true } }
+            opts. document_symbols = {
                 follow_cursor = true,
                 renderers = {
                     root = {
@@ -95,22 +108,16 @@ return {
                     }
                 }
             }
-        },
-        config = function()
-            vim.g.loaded_netrw = 1
-            vim.g.loaded_netrwPlugin = 1
 
-            vim.keymap.set('n', '\\\\', function()
-                if vim.bo.filetype == 'neo-tree' then
-                    vim.cmd('wincmd l')
-                    return
-                end
-                require("neo-tree.command").execute({
-                    open = true,
-                    source = 'filesystem',
-                    dir = vim.loop.cwd(),
-                })
-            end, { desc = 'Toggle Active Window', noremap = true })
+            require("neo-tree").setup(opts)
+            vim.api.nvim_create_autocmd("TermClose", {
+                pattern = "*lazygit",
+                callback = function()
+                    if package.loaded["neo-tree.sources.git_status"] then
+                        require("neo-tree.sources.git_status").refresh()
+                    end
+                end,
+            })
         end
 
     },
@@ -127,9 +134,8 @@ return {
     {
         "echasnovski/mini.bufremove",
         event = "VeryLazy",
-        config = function()
+        config = function(_, opts)
             vim.g.CloseWindow = function(idx)
-
                 local cmd
                 if idx == 1 then
                     cmd = 'q'
@@ -164,6 +170,8 @@ return {
 
             vim.cmd("cnoreabbrev <expr> q getcmdtype() == ':' && getcmdline() == 'q' ? 'call g:CloseWindow(1)<CR>' : 'q'")
             vim.cmd("cnoreabbrev <expr> x getcmdtype() == ':' && getcmdline() == 'x' ? 'call g:CloseWindow(2)<CR>' : 'x'")
+
+            require("mini.bufremove").setup(opts)
         end,
     },
 
@@ -182,7 +190,7 @@ return {
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        config = function ()
+        config = function (_, opts)
             if vim.fn.has('win32') == 1 then
                 require 'nvim-treesitter.install'.compilers = { "clang" }
             end
@@ -270,9 +278,10 @@ return {
 
     {
         "nvim-telescope/telescope.nvim",
-        opts = {
-            defaults = { history = false },
-        }
+        config = function (_, opts)
+            opts.defaults.history = false
+            require('telescope').setup(opts)
+        end
     },
 
     {
@@ -281,8 +290,8 @@ return {
             {'junegunn/fzf'},
             {'junegunn/fzf.vim'},  -- to enable preview (optional)
         },
-        config = function ()
-            require('lspfuzzy').setup {}
+        config = function (_, opts)
+            require('lspfuzzy').setup(opts)
         end
     },
 
