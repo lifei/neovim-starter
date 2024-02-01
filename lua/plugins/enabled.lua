@@ -1,4 +1,4 @@
--- since this is just an example spec, don't actually load anything here and return an empty spec
+-- since this is just an example spec, don"t actually load anything here and return an empty spec
 -- stylua: ignore
 -- if true then return {} end
 
@@ -12,7 +12,7 @@ return {
 
     -- the colorscheme should be available when starting Neovim
     {
-        'folke/tokyonight.nvim', -- 'folke/tokyonight.nvim'
+        "folke/tokyonight.nvim", -- "folke/tokyonight.nvim"
         lazy = false,            -- make sure we load this during startup if it is your main colorscheme
         priority = 1000,         -- make sure to load this before all the other start plugins
         enable = true,
@@ -25,22 +25,22 @@ return {
     {
         "nvim-neo-tree/neo-tree.nvim",
         version = "3.5",
-        enable = false,
-        config = function(_, opts)
-            vim.g.loaded_netrw = 1
-            vim.g.loaded_netrwPlugin = 1
-
-            vim.keymap.set('n', '\\\\', function()
-                if vim.bo.filetype == 'neo-tree' then
-                    vim.cmd('wincmd l')
+        keys = {
+            { "\\\\", function()
+                if vim.bo.filetype == "neo-tree" then
+                    vim.cmd("wincmd l")
                     return
                 end
                 require("neo-tree.command").execute({
                     open = true,
-                    source = 'filesystem',
+                    source = "filesystem",
                     dir = vim.loop.cwd(),
                 })
-            end, { desc = 'Toggle Active Window', noremap = true })
+            end, desc = "Toggle Active Window", noremap = true },
+        },
+        config = function(_, opts)
+            vim.g.loaded_netrw = 1
+            vim.g.loaded_netrwPlugin = 1
 
             local function on_move(data)
                 Util.lsp.on_rename(data.source, data.destination)
@@ -138,14 +138,14 @@ return {
             vim.g.CloseWindow = function(idx)
                 local cmd
                 if idx == 1 then
-                    cmd = 'q'
+                    cmd = "q"
                 else
-                    cmd = 'x'
+                    cmd = "x"
                 end
 
                 -- 目录窗口，随便关
-                if vim.bo.filetype == 'neo-tree' then
-                    vim.cmd('q')
+                if vim.bo.filetype == "neo-tree" then
+                    vim.cmd("q")
                     return
                 end
 
@@ -162,7 +162,7 @@ return {
                     return
                 end
                 require("mini.bufremove").delete(0)
-                local win_cnt = vim.fn.winnr('$')
+                local win_cnt = vim.fn.winnr("$")
                 if win_cnt > 1 then
                     vim.cmd(cmd)
                 end
@@ -176,23 +176,24 @@ return {
     },
 
     {
-        'bufferline.nvim',
+        "bufferline.nvim",
         opts = {
             options = {
                 indicator = {
-                    icon = '🚩', -- this should be omitted if indicator style is not 'icon'
-                    style = 'icon',
+                    icon = "🚩", -- this should be omitted if indicator style is not "icon"
+                    style = "icon",
                 },
             },
         },
+        config = true,
     },
 
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        config = function (_, opts)
-            if vim.fn.has('win32') == 1 then
-                require 'nvim-treesitter.install'.compilers = { "clang" }
+        config = function ()
+            if vim.fn.has("win32") == 1 then
+                require "nvim-treesitter.install".compilers = { "clang" }
             end
 
             require("nvim-treesitter.configs").setup{
@@ -274,27 +275,37 @@ return {
             end
             return opts
         end,
+        config = true,
     },
 
     {
         "nvim-telescope/telescope.nvim",
         config = function (_, opts)
             opts.defaults.history = false
-            require('telescope').setup(opts)
+            require("telescope").setup(opts)
         end
     },
 
     {
         "ojroques/nvim-lspfuzzy",
         requires = {
-            {'junegunn/fzf'},
-            {'junegunn/fzf.vim'},  -- to enable preview (optional)
+            {"junegunn/fzf"},
+            {"junegunn/fzf.vim"},  -- to enable preview (optional)
         },
         config = function (_, opts)
-            require('lspfuzzy').setup(opts)
+            require("lspfuzzy").setup(opts)
         end
     },
 
+    {
+        "akinsho/toggleterm.nvim",
+        version = "*",
+        event = "VeryLazy",
+        keys = {
+            { "<leader>t", "<cmd>ToggleTerm cmd='exec bash -l'<cr>", desc="Toggle Term" },
+        },
+        config = true
+    },
 }
 
 -- vim600: foldmethod=marker
