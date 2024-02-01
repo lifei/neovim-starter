@@ -136,12 +136,7 @@ return {
         event = "VeryLazy",
         config = function(_, opts)
             vim.g.CloseWindow = function(idx)
-                local cmd
-                if idx == 1 then
-                    cmd = "q"
-                else
-                    cmd = "x"
-                end
+                local cmd = idx == 1 and "q" or "x"
 
                 -- 目录窗口，随便关
                 if vim.bo.filetype == "neo-tree" then
@@ -162,10 +157,6 @@ return {
                     return
                 end
                 require("mini.bufremove").delete(0)
-                local win_cnt = vim.fn.winnr("$")
-                if win_cnt > 1 then
-                    vim.cmd(cmd)
-                end
             end
 
             vim.cmd("cnoreabbrev <expr> q getcmdtype() == ':' && getcmdline() == 'q' ? 'call g:CloseWindow(1)<CR>' : 'q'")
