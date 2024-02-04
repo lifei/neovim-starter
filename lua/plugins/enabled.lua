@@ -156,6 +156,13 @@ return {
                     vim.cmd(cmd)
                     return
                 end
+
+                local next_buf_id = vim.fn.winbufnr(vim.fn.winnr('#'))
+                for _, buf in ipairs(bufs) do
+                    if buf.bufnr == next_buf_id then
+                        vim.cmd(cmd)
+                    end
+                end
                 require("mini.bufremove").delete(0)
             end
 
