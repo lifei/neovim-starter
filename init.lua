@@ -13,7 +13,7 @@ vim.cmd.highlight({ 'CursorLine', 'cterm=NONE', 'ctermbg=darkblue', 'ctermfg=NON
 vim.opt.cursorline = true
 -- vim.opt.t_Co = 256
 vim.opt.guicursor = 'n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175'
-vim.opt.guifont = "DaddyTimeMono Nerd Font:h11"
+vim.opt.guifont = "DaddyTimeMono Nerd Font Mono:h16"
 -- "Sarasa Term SC Nerd:h12", "等距更纱黑体 SC:h14"
 
 vim.api.nvim_create_autocmd({'ExitPre'}, {
@@ -41,6 +41,8 @@ vim.keymap.set('n', '!', ':!', { noremap = true })
 -- au BufNewFile,BufRead *.7v1.net* set filetype=nginx
 
 vim.g.loaded_python3_provider = 0
+vim.g.loaded_zip = 0
+vim.g.loaded_zipPlugin= 0
 -- }}}
 
 -- =====================================
