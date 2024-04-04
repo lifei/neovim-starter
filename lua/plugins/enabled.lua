@@ -191,7 +191,8 @@ return {
         build = ":TSUpdate",
         config = function ()
             if vim.fn.has("win32") == 1 then
-                require "nvim-treesitter.install".compilers = { "clang" }
+                require 'nvim-treesitter.install'.prefer_git = false
+                require 'nvim-treesitter.install'.compilers = { "zig", "gcc", "g++", "clang", "cl" }
             end
 
             require("nvim-treesitter.configs").setup{
@@ -200,23 +201,13 @@ return {
                 auto_install = true,
                 ensure_installed = {
                     "bash",
-                    "c",
-                    "diff",
                     "html",
                     "javascript",
-                    "jsdoc",
                     "json",
-                    "jsonc",
                     "lua",
-                    "luadoc",
-                    "luap",
                     "markdown",
-                    "markdown_inline",
                     "python",
-                    "query",
-                    "regex",
                     "toml",
-                    "tsx",
                     "typescript",
                     "vim",
                     "vimdoc",
