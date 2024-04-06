@@ -8,7 +8,7 @@
 -- * add extra plugins
 -- * disable/enabled LazyVim plugins
 -- * override the configuration of LazyVim plugins
-return {
+local config = {
 
     -- the colorscheme should be available when starting Neovim
     {
@@ -296,5 +296,22 @@ return {
         config = true
     },
 }
+
+if vim.fn.has("win32") == 1 then
+  if vim.fn.executable("make") ~= 1 then
+    table.insert(config, { "nvim-telescope/telescope-fzf-native.nvim", enabled = false })
+  else
+    local env = vim.fn.environ()
+    local msystem = env["MSYSTEM"]
+    if msystem ~= nil then
+      table.insert(config, {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "MSYSTEM=MSYS64 make",
+      })
+    end
+  end
+end
+
+return config
 
 -- vim600: foldmethod=marker
