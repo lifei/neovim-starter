@@ -43,6 +43,8 @@ vim.keymap.set('n', '!', ':!', { noremap = true })
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_zip = 0
 vim.g.loaded_zipPlugin= 0
+
+vim.opt.clipboard = ''
 -- }}}
 
 -- =====================================
@@ -50,23 +52,27 @@ vim.g.loaded_zipPlugin= 0
 -- =====================================
 -- {{{
 if vim.fn.has('win32') == 1 then
-    vim.opt.shell = 'bash.exe'
-    vim.opt.shellxquote = '('
-    vim.opt.shellslash = true
-    vim.opt.shellcmdflag = '-c'
-    vim.opt.shellredir = '>%s 2>&1'
-    vim.opt.shellpipe = '2>&1| tee'
+    if vim.fn.executable('bash') == 1 and vim.fn.executable('tee') == 1 then
+        vim.opt.shell = 'bash.exe'
+        vim.opt.shellxquote = '('
+        vim.opt.shellslash = true
+        vim.opt.shellcmdflag = '-c'
+        vim.opt.shellredir = '>%s 2>&1'
+        vim.opt.shellpipe = '2>&1| tee'
+    end
 
-    vim.g.clipboard = {
-        name = 'MSYS2',
-        copy = {
-            ['+'] = 'tee /dev/clipboard'
-        },
-        paste = {
-            ['+'] = 'cat /dev/clipboard'
-        },
-        cache_enabled = 1
-    }
+    if vim.fn.executable('cat') == 1 and vim.fn.executable('tee') == 1 then
+        vim.g.clipboard = {
+            name = 'MSYS2',
+            copy = {
+                ['+'] = 'tee /dev/clipboard'
+            },
+            paste = {
+                ['+'] = 'cat /dev/clipboard'
+            },
+            cache_enabled = 1
+        }
+    end
 end
 -- }}}
 
