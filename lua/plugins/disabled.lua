@@ -21,9 +21,4 @@ local config = {
   -- { 'nvim-treesitter', enabled = false },
   -- { 'nvim-treesitter-textobjects', enabled = false },
 }
-if vim.fn.has("win32") == 1 then
-  if vim.fn.executable("make") ~= 1 then
-    table.insert(config, { "nvim-telescope/telescope-fzf-native.nvim", enabled = false })
-  end
-end
 return config
