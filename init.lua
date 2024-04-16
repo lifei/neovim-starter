@@ -63,19 +63,25 @@ if vim.fn.has("win32") == 1 then
     vim.opt.shellredir = ">%s 2>&1"
     vim.opt.shellpipe = "2>&1| tee"
   end
+end
 
-  if vim.fn.executable("win32yank") == 0 and vim.fn.executable("cat") == 1 and vim.fn.executable("tee") == 1 then
-    vim.g.clipboard = {
-      name = "MSYS2",
-      copy = {
-        ["+"] = "tee /dev/clipboard",
-      },
-      paste = {
-        ["+"] = "cat /dev/clipboard",
-      },
-      cache_enabled = 1,
-    }
-  end
+if
+  vim.g.clipboard == nil
+    and vim.fn.executable("cat") == 1
+    and vim.fn.executable("tee") == 1
+    and (vim.fn.has("win32") == 1 and vim.fn.executable("win32yank") == 0)
+  or (vim.fn.has("linux") == 1 and vim.fn.filewritable("/dev/clipboard") == 1)
+then
+  vim.g.clipboard = {
+    name = "cat/tee",
+    copy = {
+      ["+"] = "tee /dev/clipboard",
+    },
+    paste = {
+      ["+"] = "cat /dev/clipboard",
+    },
+    cache_enabled = 1,
+  }
 end
 -- }}}
 
