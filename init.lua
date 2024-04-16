@@ -10,7 +10,7 @@ vim.opt.cursorline = true
 -- vim.opt.t_Co = 256
 vim.opt.guicursor =
   "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
-vim.opt.guifont = "DaddyTimeMono Nerd Font Mono:h16"
+vim.opt.guifont = "DaddyTimeMono Nerd Font Mono:h14"
 -- "Sarasa Term SC Nerd:h12", "等距更纱黑体 SC:h14"
 
 vim.api.nvim_create_autocmd({ "ExitPre" }, {
@@ -64,7 +64,7 @@ if vim.fn.has("win32") == 1 then
     vim.opt.shellpipe = "2>&1| tee"
   end
 
-  if vim.fn.executable("cat") == 1 and vim.fn.executable("tee") == 1 then
+  if vim.fn.executable("win32yank") == 0 and vim.fn.executable("cat") == 1 and vim.fn.executable("tee") == 1 then
     vim.g.clipboard = {
       name = "MSYS2",
       copy = {
