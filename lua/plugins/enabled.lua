@@ -38,10 +38,11 @@ local config = {
         })
       end, desc = "Toggle Active Window", noremap = true },
     },
-    config = function(_, opts)
+    init = function ()
       vim.g.loaded_netrw = 1
       vim.g.loaded_netrwPlugin = 1
-
+    end,
+    opts = function (_, opts)
       local function on_move(data)
         Util.lsp.on_rename(data.source, data.destination)
       end
@@ -108,6 +109,9 @@ local config = {
           }
         }
       }
+      return opts
+    end,
+    config = function(_, opts)
 
       require("neo-tree").setup(opts)
       vim.api.nvim_create_autocmd("TermClose", {
@@ -183,95 +187,64 @@ local config = {
         },
       },
     },
-    config = true,
   },
 
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    config = function ()
+    opts = {
+      highlight = { enable = true },
+      indent = { enable = true },
+      auto_install = true,
+      ensure_installed = {
+        "bash",
+        "html",
+        "javascript",
+        "json",
+        "lua",
+        "markdown",
+        "python",
+        "toml",
+        "typescript",
+        "vim",
+        "vimdoc",
+        "yaml",
+      },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = "<C-space>",
+          node_incremental = "<C-space>",
+          scope_incremental = false,
+          node_decremental = "<bs>",
+        },
+      },
+      textobjects = {
+        move = {
+          enable = true,
+          goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer" },
+          goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer" },
+          goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer" },
+          goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer" },
+        },
+      },
+    },
+    config = function (_, opts)
       if vim.fn.has("win32") == 1 then
         require 'nvim-treesitter.install'.prefer_git = false
         require 'nvim-treesitter.install'.compilers = { "zig", "gcc", "g++", "clang", "cl" }
       end
 
-      require("nvim-treesitter.configs").setup{
-        highlight = { enable = true },
-        indent = { enable = true },
-        auto_install = true,
-        ensure_installed = {
-          "bash",
-          "html",
-          "javascript",
-          "json",
-          "lua",
-          "markdown",
-          "python",
-          "toml",
-          "typescript",
-          "vim",
-          "vimdoc",
-          "yaml",
-        },
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = "<C-space>",
-            node_incremental = "<C-space>",
-            scope_incremental = false,
-            node_decremental = "<bs>",
-          },
-        },
-        textobjects = {
-          move = {
-            enable = true,
-            goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer" },
-            goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer" },
-            goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer" },
-            goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer" },
-          },
-        },
-      }
+      require("nvim-treesitter.configs").setup(opts)
     end
-  },
-
-  {
-    "simrat39/symbols-outline.nvim",
-    keys = { { "<leader>cs", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
-    cmd = "SymbolsOutline",
-    opts = function()
-      local Config = require("lazyvim.config")
-      local defaults = require("symbols-outline.config").defaults
-      local opts = {
-        symbols = {},
-        symbol_blacklist = {},
-      }
-      local filter = Config.kind_filter
-
-      if type(filter) == "table" then
-        filter = filter.default
-        if type(filter) == "table" then
-          for kind, symbol in pairs(defaults.symbols) do
-            opts.symbols[kind] = {
-              icon = Config.icons.kinds[kind] or symbol.icon,
-              hl = symbol.hl,
-            }
-            if not vim.tbl_contains(filter, kind) then
-              table.insert(opts.symbol_blacklist, kind)
-            end
-          end
-        end
-      end
-      return opts
-    end,
   },
 
   {
     "nvim-telescope/telescope.nvim",
-    config = function (_, opts)
+    opts = function (_, opts)
       opts.defaults.history = false
-      require("telescope").setup(opts)
-    end
+      return opts
+    end,
   },
 
   {
@@ -290,7 +263,6 @@ local config = {
     keys = {
       { "<leader>t", "<cmd>ToggleTerm cmd='exec bash -l'<cr>", desc="Toggle Term" },
     },
-    config = true
   },
 
   {
@@ -306,6 +278,48 @@ local config = {
       },
     },
   },
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      -- make sure mason installs the server
+      servers = {
+        jdtls = {}
+      },
+      setup = {
+        jdtls = function()
+          return true -- avoid duplicate servers
+        end,
+      },
+    },
+  },
+  {
+    "mfussenegger/nvim-jdtls",
+    opts = {
+      settings = {
+        java = {
+          format = {enabled = true },
+          gradle = { enabled = true },
+          jdt = { ls = { androidSupport = { enabled = true }}},
+          configuration = {
+            runtimes = {
+              {
+                name = "JavaSE-11",
+                path = "./.sdkman/candidates/java/11.0.10-open/",
+              },
+              {
+                name = "JavaSE-14",
+                path = "./.sdkman/candidates/java/14.0.2-open/",
+              },
+              {
+                name = "JavaSE-15",
+                path = "./.sdkman/candidates/java/15.0.1-open/",
+              },
+            }
+          }
+        }
+      },
+    }
+  }
 }
 
 if vim.fn.has("win32") == 1 then
