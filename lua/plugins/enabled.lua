@@ -264,7 +264,6 @@ local config = {
       end
       return opts
     end,
-    config = true,
   },
 
   {
@@ -277,13 +276,11 @@ local config = {
 
   {
     "ojroques/nvim-lspfuzzy",
-    requires = {
+    dependencies = {
       {"junegunn/fzf"},
       {"junegunn/fzf.vim"},  -- to enable preview (optional)
     },
-    config = function (_, opts)
-      require("lspfuzzy").setup(opts)
-    end
+    main = "lspfuzzy",
   },
 
   {
