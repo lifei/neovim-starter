@@ -15,7 +15,6 @@ local config = {
     "folke/tokyonight.nvim", -- "folke/tokyonight.nvim"
     lazy = false,            -- make sure we load this during startup if it is your main colorscheme
     priority = 1000,         -- make sure to load this before all the other start plugins
-    enable = true,
     config = function()
       -- load the colorscheme here
       vim.cmd([[colorscheme tokyonight]])
@@ -38,10 +37,6 @@ local config = {
         })
       end, desc = "Toggle Active Window", noremap = true },
     },
-    init = function ()
-      vim.g.loaded_netrw = 1
-      vim.g.loaded_netrwPlugin = 1
-    end,
     opts = function (_, opts)
       local function on_move(data)
         Util.lsp.on_rename(data.source, data.destination)
@@ -109,10 +104,8 @@ local config = {
           }
         }
       }
-      return opts
-    end,
-    config = function(_, opts)
-
+      vim.g.loaded_netrw = 1
+      vim.g.loaded_netrwPlugin = 1
       require("neo-tree").setup(opts)
       vim.api.nvim_create_autocmd("TermClose", {
         pattern = "*lazygit",
@@ -122,8 +115,8 @@ local config = {
           end
         end,
       })
-    end
-
+      return opts
+    end,
   },
 
   {

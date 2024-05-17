@@ -36,6 +36,9 @@ vim.keymap.set("n", "!", ":!", { noremap = true })
 -- au BufNewFile,BufRead *.7v1.net* set filetype=nginx
 
 vim.g.loaded_python3_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_ruby_provider = 0
 vim.g.loaded_zip = 0
 vim.g.loaded_zipPlugin = 0
 
