@@ -5,24 +5,27 @@ local config = {
       preview = {
         filesize_limit = 1, -- MB
       },
-      vimgrep_arguments = {
-        "rg",
-        "--color=never",
-        "--no-heading",
-        "--with-filename",
-        "--line-number",
-        "--column",
-        "--smart-case",
-        "--trim", -- add this value
-      },
-    },
-    pickers = {
-      find_files = {
-        find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
-      },
     },
   },
 }
+
+if vim.fn.executable("rg") == 1 then
+  config.opts.defaults.vimgrep_arguments = {
+    "rg",
+    "--color=never",
+    "--no-heading",
+    "--with-filename",
+    "--line-number",
+    "--column",
+    "--smart-case",
+    "--trim", -- add this value
+  }
+  config.opts.pickers = {
+    find_files = {
+      find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
+    },
+  }
+end
 
 if vim.fn.has("win32") == 1 then
   if vim.fn.executable("make") ~= 1 then

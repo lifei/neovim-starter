@@ -30,9 +30,9 @@ local config = {
     },
   },
 
-
   {
     "bufferline.nvim",
+    branch = "main",
     opts = {
       options = {
         indicator = {
