@@ -11,6 +11,11 @@ return {
         return
       end
 
+      if not vim.bo.buflisted then
+        vim.cmd(cmd)
+        return
+      end
+
       -- 只剩下一个buf
       local bufs = vim.fn.getbufinfo({ buflisted = 1 })
       local buf_cnt = #bufs
@@ -19,15 +24,14 @@ return {
         return
       end
 
-      if not vim.bo.buflisted then
-        vim.cmd(cmd)
-        return
-      end
-
-      local next_buf_id = vim.fn.winbufnr(vim.fn.winnr("#"))
-      for _, buf in ipairs(bufs) do
-        if buf.bufnr == next_buf_id then
-          vim.cmd(cmd)
+      local curwinid = vim.fn.winnr()
+      local wins = vim.fn.getwininfo()
+      for _, win in ipairs(wins) do
+        if win.winnr ~= curwinid then
+          if vim.bo[win.bufnr].buflisted then
+            vim.cmd(cmd)
+            return
+          end
         end
       end
       require("mini.bufremove").delete(0)
