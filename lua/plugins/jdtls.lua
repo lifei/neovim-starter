@@ -1,12 +1,8 @@
-if vim.fn.executable("java") == 0 then
-  return {
-    "mfussenegger/nvim-jdtls",
-    enabled = false,
-  }
-end
-
 local config = {
   "mfussenegger/nvim-jdtls",
+  cond = function()
+    return vim.fn.executable("java") == 1
+  end,
   dependencies = { "williamboman/mason.nvim" },
   ft = "java",
   opts = function(_, opts)

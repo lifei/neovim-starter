@@ -68,12 +68,27 @@ local config = {
       "neovim/nvim-lspconfig",
       "nvim-treesitter/nvim-treesitter",
     },
+    cond = function()
+      return vim.fn.executable("go") == 1
+    end,
     config = function()
       require("go").setup()
     end,
     event = {"CmdlineEnter"},
     ft = {"go", 'gomod'},
     build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+  },
+
+  {
+    'akinsho/flutter-tools.nvim',
+    cond = function()
+      return vim.fn.executable("flutter") == 1
+    end,
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'stevearc/dressing.nvim', -- optional for vim.ui.select
+    },
+    config = true,
   }
 }
 
