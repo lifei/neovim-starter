@@ -89,7 +89,7 @@ local config = {
       'stevearc/dressing.nvim', -- optional for vim.ui.select
     },
     config = true,
-  }
+  },
 }
 
 return config

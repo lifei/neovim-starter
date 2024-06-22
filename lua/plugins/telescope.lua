@@ -20,6 +20,9 @@ if vim.fn.executable("rg") == 1 then
     "--smart-case",
     "--trim", -- add this value
   }
+end
+
+if vim.fn.executable("fd") == 1 then
   config.opts.pickers = {
     find_files = {
       find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
