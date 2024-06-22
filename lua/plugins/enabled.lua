@@ -90,6 +90,34 @@ local config = {
     },
     config = true,
   },
+
+  {
+    "neovim/nvim-lspconfig",
+    opts = function(_, opts)
+      local servers = opts.servers
+      local remove_lsps = function(...)
+        local lsps = {...}
+        for i=1,#lsps do
+          if servers[lsps[i]] ~= nil then
+            table.remove(servers, lsps[i])
+          end
+        end
+      end
+      if vim.fn.executable("java") == 0 then
+          remove_lsps("jdtls")
+      end
+      if vim.fn.executable("npm") == 0 then
+          remove_lsps("pyright", "dockerfile-language-server", "docker-compose-language-service", "json-lsp")
+      end
+      if vim.fn.executable("python3") == 0 then
+        remove_lsps("pyright", "ruff-lsp")
+      end
+      if vim.fn.executable("go") == 0 then
+        remove_lsps("gopls")
+      end
+      return opts
+    end
+  }
 }
 
 return config
