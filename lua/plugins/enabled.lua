@@ -76,7 +76,11 @@ local config = {
     end,
     event = {"CmdlineEnter"},
     ft = {"go", 'gomod'},
-    build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+    build = function()
+      if vim.fn.executable("go") == 1 then
+        require("go.install").update_all_sync()
+      end
+    end -- if you need to install/update all binaries
   },
 
   {
