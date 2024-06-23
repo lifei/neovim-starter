@@ -1,0 +1,7 @@
+{
+    "echo": {
+        "prefix": "echo",
+        "body": "animation: ${1:name} ${2:1s} ${3|linear,ease-in-out,ease,ease-in,ease-out,step-start,step-end,steps,cubic-bezier|};",
+        "description": "Using echo"
+    }
+}

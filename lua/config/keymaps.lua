@@ -4,3 +4,7 @@
 
 vim.keymap.set("n", ";", ":", { noremap = true })
 vim.keymap.set("n", "!", ":!", { noremap = true })
+vim.keymap.set({ "i", "s" }, "<C-L>", function()
+  local ls = require("luasnip")
+  ls.change_choice(1)
+end, { silent = true })

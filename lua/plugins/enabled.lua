@@ -121,7 +121,7 @@ local config = {
       end
       return opts
     end
-  }
+  },
 }
 
 return config
