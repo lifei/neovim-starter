@@ -47,8 +47,8 @@ local config = {
   {
     "ojroques/nvim-lspfuzzy",
     dependencies = {
-      {"junegunn/fzf"},
-      {"junegunn/fzf.vim"},  -- to enable preview (optional)
+      { "junegunn/fzf" },
+      { "junegunn/fzf.vim" }, -- to enable preview (optional)
     },
     main = "lspfuzzy",
   },
@@ -58,14 +58,14 @@ local config = {
     version = "*",
     event = "VeryLazy",
     keys = {
-      { "<leader>t", "<cmd>ToggleTerm cmd='exec bash -l'<cr>", desc="Toggle Term" },
+      { "<leader>t", "<cmd>ToggleTerm cmd='exec bash -l'<cr>", desc = "Toggle Term" },
     },
     config = true,
   },
 
   {
     "ray-x/go.nvim",
-    dependencies = {  -- optional packages
+    dependencies = { -- optional packages
       "ray-x/guihua.lua",
       "neovim/nvim-lspconfig",
       "nvim-treesitter/nvim-treesitter",
@@ -76,8 +76,8 @@ local config = {
     config = function(_, opts)
       require("go").setup(opts)
     end,
-    event = {"CmdlineEnter"},
-    ft = {"go", 'gomod'},
+    event = { "CmdlineEnter" },
+    ft = { "go", 'gomod' },
     build = function()
       if vim.fn.executable("go") == 1 then
         require("go.install").update_all_sync()
@@ -103,10 +103,12 @@ local config = {
       opts.autoformat = true
       local servers = opts.servers
       local remove_lsps = function(...)
-        local lsps = {...}
-        for i=1,#lsps do
-          if servers[lsps[i]] ~= nil then
-            table.remove(servers, lsps[i])
+        local lsps = { ... }
+        for i = 1, #lsps do
+          local k = lsps[i]
+          local server = servers[k]
+          if server ~= nil then
+            server.enabled = false
           end
         end
       end
@@ -114,10 +116,10 @@ local config = {
         remove_lsps("jdtls")
       end
       if vim.fn.executable("npm") == 0 then
-        remove_lsps("pyright", "dockerfile-language-server", "docker-compose-language-service", "json-lsp")
+        remove_lsps("pyright", "dockerls", "docker_compose_language_service", "jsonls")
       end
       if vim.fn.executable("python3") == 0 then
-        remove_lsps("pyright", "ruff-lsp")
+        remove_lsps("pyright", "ruff_lsp")
       end
       if vim.fn.executable("go") == 0 then
         remove_lsps("gopls")
