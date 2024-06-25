@@ -28,6 +28,7 @@ local config = {
       { "s", mode = { "n", "x", "o" }, false },
       { "S", mode = { "n", "x", "o" }, false },
     },
+    config = true,
   },
 
   {
@@ -59,6 +60,7 @@ local config = {
     keys = {
       { "<leader>t", "<cmd>ToggleTerm cmd='exec bash -l'<cr>", desc="Toggle Term" },
     },
+    config = true,
   },
 
   {
@@ -71,8 +73,8 @@ local config = {
     cond = function()
       return vim.fn.executable("go") == 1
     end,
-    config = function()
-      require("go").setup()
+    config = function(_, opts)
+      require("go").setup(opts)
     end,
     event = {"CmdlineEnter"},
     ft = {"go", 'gomod'},
@@ -98,6 +100,7 @@ local config = {
   {
     "neovim/nvim-lspconfig",
     opts = function(_, opts)
+      opts.autoformat = true
       local servers = opts.servers
       local remove_lsps = function(...)
         local lsps = {...}
@@ -108,10 +111,10 @@ local config = {
         end
       end
       if vim.fn.executable("java") == 0 then
-          remove_lsps("jdtls")
+        remove_lsps("jdtls")
       end
       if vim.fn.executable("npm") == 0 then
-          remove_lsps("pyright", "dockerfile-language-server", "docker-compose-language-service", "json-lsp")
+        remove_lsps("pyright", "dockerfile-language-server", "docker-compose-language-service", "json-lsp")
       end
       if vim.fn.executable("python3") == 0 then
         remove_lsps("pyright", "ruff-lsp")
