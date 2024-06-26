@@ -90,6 +90,7 @@ local config = {
     cond = function()
       return vim.fn.executable("flutter") == 1
     end,
+    lazy = true,
     dependencies = {
       'nvim-lua/plenary.nvim',
       'stevearc/dressing.nvim', -- optional for vim.ui.select
