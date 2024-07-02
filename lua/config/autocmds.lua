@@ -7,3 +7,5 @@ vim.api.nvim_create_autocmd({ "ExitPre" }, {
     vim.cmd("set guicursor=n-v-c:ver25")
   end,
 })
+
+vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
