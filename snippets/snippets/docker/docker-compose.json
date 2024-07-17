@@ -1,0 +1,9 @@
+{
+    "Restart": {
+        "prefix": "res",
+        "body": [
+            "restart: ${1|always,unless-stopped,on-failure:3,no|}"
+        ],
+        "description": "restart"
+    }
+}

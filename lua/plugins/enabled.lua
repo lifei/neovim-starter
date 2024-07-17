@@ -73,11 +73,6 @@ local config = {
     cond = function()
       return vim.fn.executable("go") == 1
     end,
-    config = function(_, opts)
-      require("go").setup(opts)
-    end,
-    event = { "CmdlineEnter" },
-    ft = { "go", 'gomod' },
     build = function()
       if vim.fn.executable("go") == 1 then
         require("go.install").update_all_sync()
@@ -128,6 +123,24 @@ local config = {
       return opts
     end
   },
+  {
+    "garymjr/nvim-snippets",
+    opts = {
+      friendly_snippets = true,
+    },
+    config = function (_, opts)
+      local Snippets = require("snippets")
+      local load_friendly_snippets = Snippets.utils.load_friendly_snippets
+      Snippets.utils.load_friendly_snippets = function ()
+        load_friendly_snippets()
+        local search_paths = Snippets.config.get_option("search_paths", {})
+        local path = table.remove(search_paths)
+        table.insert(search_paths, 1, path)
+      end
+      require("snippets").setup(opts)
+    end,
+    dependencies = { "rafamadriz/friendly-snippets" },
+  }
 }
 
 return config
