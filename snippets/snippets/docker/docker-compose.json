@@ -5,5 +5,12 @@
             "restart: ${1|always,unless-stopped,on-failure:3,no|}"
         ],
         "description": "restart"
+    },
+    "Netwrok Mode": {
+        "prefix": "network_",
+        "body": [
+            "network_mode: ${1|host,none|}"
+        ],
+        "description": "network_mode"
     }
 }
