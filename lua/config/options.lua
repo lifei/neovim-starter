@@ -32,16 +32,14 @@ vim.opt.clipboard = ""
 -- {{{
 if vim.fn.has("win32") == 1 then
   if vim.fn.isdirectory("C:\\Software\\msys64") == 1 then
-    vim.fn.setenv("PATH", vim.env.path .. ";C:\\Software\\msys64\\usr\\bin;C:\\Software\\msys64\\ucrt64\\usr\\bin")
+    vim.fn.setenv("PATH", "C:\\Software\\msys64\\usr\\bin;C:\\Software\\msys64\\ucrt64\\usr\\bin;" .. vim.env.path)
     local msystem = vim.fn.environ()["MSYSTEM"]
     if msystem == nil then
       vim.fn.setenv("MSYSTEM", "UCRT64")
     end
-  end
 
-  if vim.fn.executable("bash") == 1 and vim.fn.executable("tee") == 1 then
-    vim.opt.shell = "bash.exe"
-    vim.opt.shellxquote = "("
+    vim.opt.shell = "C:\\Software\\msys64\\usr\\bin\\bash.exe"
+    vim.opt.shellxquote = ""
     vim.opt.shellslash = true
     vim.opt.shellcmdflag = "-c"
     vim.opt.shellredir = ">%s 2>&1"

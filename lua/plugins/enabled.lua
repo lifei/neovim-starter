@@ -58,9 +58,19 @@ local config = {
     version = "*",
     event = "VeryLazy",
     keys = {
-      { "<leader>t", "<cmd>ToggleTerm cmd='exec bash -l'<cr>", desc = "Toggle Term" },
+      { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
+      { "<leader>tp", "<cmd>TermExec cmd=pwsh<cr>", desc = "Toggle Powershell" },
+      { "<leader>ts", "<cmd>ToggleTerm direction=vertical size=" .. (vim.o.columns / 3) .. "<cr>", desc = "Toggle Termimal Vertical" },
     },
     config = true,
+		opts = function(_, opts)
+      if vim.fn.has("win32") == 1 then
+			  opts.shell = 'exec /usr/bin/bash -i -l'
+        -- opts.on_open = function() end
+        return opts
+      end
+    end,
+    main = "toggleterm",
   },
 
   {
