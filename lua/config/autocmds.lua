@@ -8,4 +8,10 @@ vim.api.nvim_create_autocmd({ "ExitPre" }, {
   end,
 })
 
+vim.api.nvim_create_autocmd({ "TermOpen" }, {
+  callback = function()
+    vim.cmd("setlocal guicursor+=i:ver25")
+  end,
+})
+
 vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
