@@ -35,6 +35,11 @@ vim.opt.guicursor:append({ t = "ver25" })
 if vim.fn.has("win32") == 1 then
   if vim.fn.isdirectory("C:\\Software\\msys64") == 1 then
     vim.fn.setenv("PATH", "C:\\Software\\msys64\\usr\\bin;C:\\Software\\msys64\\ucrt64\\usr\\bin;" .. vim.env.path)
+    vim.fn.setenv("MSYSCON", "defterm")
+    vim.fn.setenv("MSYS2_PATH_TYPE", "inherit")
+    vim.fn.setenv("CHERE_INVOKING", "enabled_from_arguments")
+    vim.fn.setenv("MSYSTEM", "UCRT64")
+    vim.fn.setenv("MSYS2_NOSTART", "yes")
     local msystem = vim.fn.environ()["MSYSTEM"]
     if msystem == nil then
       vim.fn.setenv("MSYSTEM", "UCRT64")
