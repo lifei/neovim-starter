@@ -134,6 +134,16 @@ local config = {
     end
   },
   {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts_extend = { "spec" },
+    opts = {
+      spec = {
+        { "<leader>t", group = "terminal", icon = { icon = " ", color = "cyan" } },
+      }
+    },
+  },
+  {
     "garymjr/nvim-snippets",
     opts = {
       friendly_snippets = true,
