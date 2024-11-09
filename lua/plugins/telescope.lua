@@ -30,20 +30,18 @@ if vim.fn.executable("fd") == 1 then
   }
 end
 
+local fzf_native_config = {
+  "nvim-telescope/telescope-fzf-native.nvim",
+  cond = function()
+    return vim.fn.executable("make") == 1 and vim.fn.executable("gcc") == 1
+  end,
+}
 if vim.fn.has("win32") == 1 then
-  local fzf_native_config = {
-    "nvim-telescope/telescope-fzf-native.nvim",
-    cond = function()
-      return vim.fn.executable("make") == 1 and vim.fn.executable("gcc") == 1
-    end,
-  }
-
   local env = vim.fn.environ()
   local msystem = env["MSYSTEM"]
   if msystem ~= nil then
     fzf_native_config.build = "MSYSTEM=MSYS64 make"
   end
-  table.insert(config, fzf_native_config)
 end
 
-return config
+return { config, fzf_native_config }

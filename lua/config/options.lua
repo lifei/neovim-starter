@@ -52,6 +52,10 @@ if vim.fn.has("win32") == 1 then
     vim.opt.shellredir = ">%s 2>&1"
     vim.opt.shellpipe = "2>&1| tee"
   end
+elseif vim.fn.has("mac") == 1 then
+  if vim.fn.isdirectory("/opt/homebrew/bin/") == 1 then
+    vim.fn.setenv("PATH", "/opt/homebrew/bin:" .. vim.env.PATH)
+  end
 end
 
 if
