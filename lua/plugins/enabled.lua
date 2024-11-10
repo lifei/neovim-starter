@@ -75,6 +75,7 @@ local config = {
 
   {
     "ray-x/go.nvim",
+    lazy = true,
     dependencies = { -- optional packages
       "ray-x/guihua.lua",
       "neovim/nvim-lspconfig",
@@ -92,6 +93,7 @@ local config = {
 
   {
     'akinsho/flutter-tools.nvim',
+    lazy = true,
     cond = function()
       return vim.fn.executable("flutter") == 1
     end,
@@ -129,6 +131,9 @@ local config = {
       end
       if vim.fn.executable("go") == 0 then
         remove_lsps("gopls")
+      end
+      if vim.loop.os_getenv("TERMUX_VERSION") ~= nil then
+        remove_lsps("lua_ls", "stylua")
       end
       return opts
     end
