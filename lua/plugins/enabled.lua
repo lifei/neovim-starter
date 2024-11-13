@@ -56,7 +56,7 @@ local config = {
   {
     "akinsho/toggleterm.nvim",
     version = "*",
-    event = "VeryLazy",
+    lazy = true,
     keys = {
       { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
       { "<leader>tp", "<cmd>TermExec cmd=pwsh<cr>", desc = "Toggle Powershell" },
