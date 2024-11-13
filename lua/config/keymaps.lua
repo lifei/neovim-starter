@@ -13,5 +13,5 @@ vim.keymap.set({ "n" }, "<D-v>", '"+p')
 vim.keymap.set({ "v" }, "<D-c>", '"+y')
 
 vim.keymap.set({ "i", "c", "l" }, "<C-v>", "<C-R>+")
-vim.keymap.set({ "n" }, "<C-v>", '"+p')
+vim.keymap.set({ "n" }, "<M-v>", '"+p')
 vim.keymap.set({ "v" }, "<C-c>", '"+y')
