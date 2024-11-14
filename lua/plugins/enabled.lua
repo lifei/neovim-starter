@@ -145,6 +145,7 @@ local config = {
     opts = {
       spec = {
         { "<leader>t", group = "terminal", icon = { icon = " ", color = "cyan" } },
+        { "<leader>r", group = "surround", icon = { icon = "ⓢ ", color = "cyan" }, mode = { "v" } },
       }
     },
   },
