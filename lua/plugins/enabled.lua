@@ -149,24 +149,6 @@ local config = {
       }
     },
   },
-  {
-    "garymjr/nvim-snippets",
-    opts = {
-      friendly_snippets = true,
-    },
-    config = function (_, opts)
-      local Snippets = require("snippets")
-      local load_friendly_snippets = Snippets.utils.load_friendly_snippets
-      Snippets.utils.load_friendly_snippets = function ()
-        load_friendly_snippets()
-        local search_paths = Snippets.config.get_option("search_paths", {})
-        local path = table.remove(search_paths)
-        table.insert(search_paths, 1, path)
-      end
-      require("snippets").setup(opts)
-    end,
-    dependencies = { "rafamadriz/friendly-snippets" },
-  }
 }
 
 return config
