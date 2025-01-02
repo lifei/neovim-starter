@@ -10,6 +10,9 @@ vim.g.loaded_ruby_provider = 0
 vim.g.loaded_zip = 0
 vim.g.loaded_zipPlugin = 0
 
+vim.g.lazyvim_python_lsp = "basedpyright"
+vim.g.lazyvim_python_ruff = "ruff"
+
 if vim.fn.has("termguicolors") then
   vim.opt.termguicolors = true
 end
