@@ -10,13 +10,18 @@ vim.keymap.set({ "i", "s" }, "<C-L>", function()
 end, { silent = true })
 
 vim.keymap.set({ "i", "c", "l" }, "<D-v>", "<C-R>+")
+vim.keymap.set({ "i", "c", "l" }, "<M-v>", "<C-R>+")
 vim.keymap.set({ "i", "c", "l" }, "<C-v>", "<C-R>+")
+vim.keymap.set({ "i", "c", "l" }, "<S-Ins>", "<C-R>+")
 
 vim.keymap.set({ "n" }, "<D-v>", '"+p')
 vim.keymap.set({ "n" }, "<M-v>", '"+p')
+vim.keymap.set({ "n" }, "<S-Ins>", '"+p')
 
 vim.keymap.set({ "v" }, "<D-c>", '"+y')
+vim.keymap.set({ "v" }, "<M-c>", '"+y')
 vim.keymap.set({ "v" }, "<C-c>", '"+y')
+vim.keymap.set({ "v" }, "<C-Ins>", '"+y')
 
 vim.keymap.set({ "v" }, "<leader>r`", "di``<ESC>P", { desc = "Surround with `" })
 vim.keymap.set({ "v" }, "<leader>r'", "di''<ESC>P", { desc = "Surround with '" })
