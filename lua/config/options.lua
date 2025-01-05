@@ -28,7 +28,6 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.number = true
-vim.opt.clipboard = ""
 vim.opt.guicursor:append({ t = "ver25" })
 
 -- =====================================
@@ -61,24 +60,41 @@ elseif vim.fn.has("mac") == 1 then
   end
 end
 
-if
-  vim.g.clipboard == nil
-    and vim.fn.executable("cat") == 1
+if vim.g.clipboard == nil then
+  if
+    vim.fn.executable("cat") == 1
     and vim.fn.executable("tee") == 1
-    and (vim.fn.has("win32") == 1 and vim.fn.executable("win32yank") == 0)
-  or (vim.fn.has("linux") == 1 and vim.fn.filewritable("/dev/clipboard") == 1)
-then
-  vim.g.clipboard = {
-    name = "cat/tee",
-    copy = {
-      ["+"] = "tee /dev/clipboard",
-      ["*"] = "tee /dev/clipboard",
-    },
-    paste = {
-      ["+"] = "cat /dev/clipboard",
-      ["*"] = "cat /dev/clipboard",
-    },
-    cache_enabled = 1,
-  }
+    and (
+      (vim.fn.has("win32") == 1 and vim.fn.executable("win32yank") == 0)
+      or (vim.fn.has("linux") == 1 and vim.fn.filewritable("/dev/clipboard") == 1)
+    )
+  then
+    vim.g.clipboard = {
+      name = "cat/tee",
+      copy = {
+        ["+"] = "tee /dev/clipboard",
+        ["*"] = "tee /dev/clipboard",
+      },
+      paste = {
+        ["+"] = "cat /dev/clipboard",
+        ["*"] = "cat /dev/clipboard",
+      },
+      cache_enabled = 1,
+    }
+  end
+  local ssh_connection = vim.fn.getenv("SSH_CONNECTION")
+  if ssh_connection ~= vim.NIL then
+    vim.g.clipboard = {
+      name = "OSC 52",
+      copy = {
+        ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+        ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+      },
+      paste = {
+        ["+"] = require("vim.ui.clipboard.osc52").paste("+"),
+        ["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+      },
+    }
+  end
 end
 -- }}}
