@@ -46,11 +46,12 @@ local config = {
     version = "*",
     lazy = true,
     keys = {
-      { "<leader>th", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
-      { "<leader>tp", "<cmd>TermExec cmd=pwsh<cr>", desc = "Toggle Powershell" },
-      { "<leader>ts", "<cmd>ToggleTerm direction=vertical size=" .. (vim.o.columns / 3) .. "<cr>", desc = "Toggle Termimal(Vertical)" },
+      { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
+      { "<leader>tb", "<cmd>ToggleTerm direction=tab<cr>", desc = "Toggle Termimal(Tab)" },
       { "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", desc = "Toggle Termimal(Float)" },
-      { "<leader>tt", "<cmd>ToggleTerm direction=tab<cr>", desc = "Toggle Termimal(Tab)" },
+      { "<leader>th", "<cmd>ToggleTerm direction=horizontal<cr>", desc = "Toggle Termimal(Horizontal)" },
+      { "<leader>tv", "<cmd>ToggleTerm direction=vertical size=" .. (vim.o.columns / 3) .. "<cr>", desc = "Toggle Termimal(Vertical)" },
+      { "<leader>tp", "<cmd>TermExec cmd=pwsh.exe<cr>", desc = "Toggle Powershell" },
     },
     config = true,
 		opts = function(_, opts)
@@ -60,6 +61,7 @@ local config = {
       elseif vim.fn.has("linux") == 1 then
 			  opts.shell = 'exec /usr/bin/bash -i -l'
       end
+      opts.float_opts = { border = 'double', title_pos = 'center' }
       return opts
     end,
     main = "toggleterm",
