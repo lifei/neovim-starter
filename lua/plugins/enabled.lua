@@ -48,15 +48,18 @@ local config = {
     keys = {
       { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
       { "<leader>tp", "<cmd>TermExec cmd=pwsh<cr>", desc = "Toggle Powershell" },
-      { "<leader>ts", "<cmd>ToggleTerm direction=vertical size=" .. (vim.o.columns / 3) .. "<cr>", desc = "Toggle Termimal Vertical" },
+      { "<leader>ts", "<cmd>ToggleTerm direction=vertical size=" .. (vim.o.columns / 3) .. "<cr>", desc = "Toggle Termimal(Vertical)" },
+      { "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", desc = "Toggle Termimal(Float)" },
     },
     config = true,
 		opts = function(_, opts)
       if vim.fn.has("win32") == 1 then
 			  opts.shell = 'exec /usr/bin/bash -i -l'
         -- opts.on_open = function() end
-        return opts
+      elseif vim.fn.has("linux") == 1 then
+			  opts.shell = 'exec /usr/bin/bash -i -l'
       end
+      return opts
     end,
     main = "toggleterm",
   },
@@ -108,6 +111,7 @@ local config = {
           end
         end
       end
+
       if vim.fn.executable("java") == 0 then
         remove_lsps("jdtls")
       end
@@ -115,7 +119,7 @@ local config = {
         remove_lsps("pyright", "dockerls", "docker_compose_language_service", "jsonls")
       end
       if vim.fn.executable("python3") == 0 then
-        remove_lsps("pyright", "ruff_lsp")
+        remove_lsps("basedpyright", "ruff", "pyright", "ruff_lsp")
       end
       if vim.fn.executable("go") == 0 then
         remove_lsps("gopls")
