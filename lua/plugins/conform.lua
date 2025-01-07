@@ -3,6 +3,7 @@ return {
   opts = {
     formatters_by_ft = {
       ["sql"] = { { "sql_formatter", "sqlfmt" } },
+      ["javascript"] = { { "prettier", "prettierd" } },
     },
     formatters = {
       sql_formatter = {
