@@ -75,9 +75,11 @@ return {
         },
       },
     }
+    return opts
+  end,
+  init = function()
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
-    require("neo-tree").setup(opts)
     vim.api.nvim_create_autocmd("TermClose", {
       pattern = "*lazygit",
       callback = function()
@@ -86,6 +88,5 @@ return {
         end
       end,
     })
-    return opts
   end,
 }

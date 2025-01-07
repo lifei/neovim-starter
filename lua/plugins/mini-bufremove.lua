@@ -1,7 +1,7 @@
 return {
   "echasnovski/mini.bufremove",
   event = "VeryLazy",
-  config = function(_, opts)
+  init = function()
     vim.g.CloseWindow = function(idx)
       local cmd = idx == 1 and "q" or "x"
 
@@ -39,7 +39,5 @@ return {
 
     vim.cmd("cnoreabbrev <expr> q getcmdtype() == ':' && getcmdline() == 'q' ? 'call g:CloseWindow(1)<CR>' : 'q'")
     vim.cmd("cnoreabbrev <expr> x getcmdtype() == ':' && getcmdline() == 'x' ? 'call g:CloseWindow(2)<CR>' : 'x'")
-
-    require("mini.bufremove").setup(opts)
   end,
 }

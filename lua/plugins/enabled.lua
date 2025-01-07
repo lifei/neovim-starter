@@ -1,13 +1,3 @@
--- since this is just an example spec, don"t actually load anything here and return an empty spec
--- stylua: ignore
--- if true then return {} end
-
--- every spec file under the "plugins" directory will be loaded automatically by lazy.nvim
---
--- In your plugin files, you can:
--- * add extra plugins
--- * disable/enabled LazyVim plugins
--- * override the configuration of LazyVim plugins
 local config = {
   {
     "folke/flash.nvim",
@@ -40,33 +30,37 @@ local config = {
     },
     main = "lspfuzzy",
   },
-
   {
     "akinsho/toggleterm.nvim",
     version = "*",
     lazy = true,
     keys = {
-      { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
-      { "<leader>tb", "<cmd>ToggleTerm direction=tab<cr>", desc = "Toggle Termimal(Tab)" },
+      { "<backspace>", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
+      { "<leader>tt", "<cmd>ToggleTerm direction=tab<cr>", desc = "Toggle Termimal(Tab)" },
       { "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", desc = "Toggle Termimal(Float)" },
       { "<leader>th", "<cmd>ToggleTerm direction=horizontal<cr>", desc = "Toggle Termimal(Horizontal)" },
-      { "<leader>tv", "<cmd>ToggleTerm direction=vertical size=" .. (vim.o.columns / 3) .. "<cr>", desc = "Toggle Termimal(Vertical)" },
+      {
+        "<leader>tv",
+        "<cmd>ToggleTerm direction=vertical size=" .. (vim.o.columns / 3) .. "<cr>",
+        desc = "Toggle Termimal(Vertical)",
+      },
       { "<leader>tp", "<cmd>TermExec cmd=pwsh.exe<cr>", desc = "Toggle Powershell" },
     },
     config = true,
-		opts = function(_, opts)
+    opts = function(_, opts)
       if vim.fn.has("win32") == 1 then
-			  opts.shell = 'exec /usr/bin/bash -i -l'
+        opts.shell = "exec /usr/bin/bash -i -l"
         -- opts.on_open = function() end
       elseif vim.fn.has("linux") == 1 then
-			  opts.shell = 'exec /usr/bin/bash -i -l'
+        opts.shell = "exec /usr/bin/bash -i -l"
       end
-      opts.float_opts = { border = 'double', title_pos = 'center' }
+      opts.direction = "float"
+      opts.float_opts = { border = "double", title_pos = "center" }
+      opts.responsiveness = { horizontal_breakpoint = 135 }
       return opts
     end,
     main = "toggleterm",
   },
-
   {
     "ray-x/go.nvim",
     lazy = true,
@@ -82,19 +76,19 @@ local config = {
       if vim.fn.executable("go") == 1 then
         require("go.install").update_all_sync()
       end
-    end -- if you need to install/update all binaries
+    end, -- if you need to install/update all binaries
   },
 
   {
-    'akinsho/flutter-tools.nvim',
+    "akinsho/flutter-tools.nvim",
     lazy = true,
     cond = function()
       return vim.fn.executable("flutter") == 1
     end,
     event = "VeryLazy",
     dependencies = {
-      'nvim-lua/plenary.nvim',
-      'stevearc/dressing.nvim', -- optional for vim.ui.select
+      "nvim-lua/plenary.nvim",
+      "stevearc/dressing.nvim", -- optional for vim.ui.select
     },
     config = true,
   },
@@ -131,7 +125,7 @@ local config = {
         remove_lsps("lua_ls", "stylua")
       end
       return opts
-    end
+    end,
   },
   {
     "folke/which-key.nvim",
@@ -141,7 +135,7 @@ local config = {
       spec = {
         { "<leader>t", group = "terminal", icon = { icon = " ", color = "cyan" } },
         { "<leader>r", group = "surround", icon = { icon = "ⓢ ", color = "cyan" }, mode = { "v" } },
-      }
+      },
     },
   },
 }
