@@ -35,7 +35,7 @@ local config = {
     version = "*",
     lazy = true,
     keys = {
-      { "<backspace>", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
+      { "<enter>", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
       { "<leader>tt", "<cmd>ToggleTerm direction=tab<cr>", desc = "Toggle Termimal(Tab)" },
       { "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", desc = "Toggle Termimal(Float)" },
       { "<leader>th", "<cmd>ToggleTerm direction=horizontal<cr>", desc = "Toggle Termimal(Horizontal)" },

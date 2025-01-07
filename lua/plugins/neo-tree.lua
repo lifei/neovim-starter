@@ -3,7 +3,7 @@ return {
   version = "v3.x",
   keys = {
     {
-      "\\\\",
+      "\\",
       function()
         if vim.bo.filetype == "neo-tree" then
           vim.cmd("wincmd l")
