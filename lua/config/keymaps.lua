@@ -28,3 +28,5 @@ vim.keymap.set({ "v" }, "<leader>r'", "di''<ESC>P", { desc = "Surround with '" }
 vim.keymap.set({ "v" }, '<leader>r"', 'di""<ESC>P', { desc = 'Surround with "' })
 vim.keymap.set({ "v" }, "<leader>r(", "di()<ESC>P", { desc = "Surround with ()" })
 vim.keymap.set({ "v" }, "<leader>r[", "di[]<ESC>P", { desc = "Surround with []" })
+
+vim.keymap.set({ "n" }, "<tab>", "<C-W>w")
