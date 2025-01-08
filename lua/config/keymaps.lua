@@ -9,14 +9,26 @@ vim.keymap.set({ "i", "s" }, "<C-L>", function()
   ls.change_choice(1)
 end, { silent = true })
 
-vim.keymap.set({ "i", "c", "l" }, "<D-v>", "<C-R>+")
-vim.keymap.set({ "i", "c", "l" }, "<M-v>", "<C-R>+")
-vim.keymap.set({ "i", "c", "l" }, "<C-v>", "<C-R>+")
-vim.keymap.set({ "i", "c", "l" }, "<S-Ins>", "<C-R>+")
 
-vim.keymap.set({ "n" }, "<D-v>", '"+p')
-vim.keymap.set({ "n" }, "<M-v>", '"+p')
-vim.keymap.set({ "n" }, "<S-Ins>", '"+p')
+local paste = function()
+  local lines = vim.fn.getreg("+")
+  vim.api.nvim_paste(lines, false, -1)
+end
+local topts = { silent = true }
+local opts = { silent = true, noremap = true }
+
+vim.keymap.set({ "i", "c", "l" }, "<D-v>",   paste, opts)
+vim.keymap.set({ "i", "c", "l" }, "<M-v>",   paste, opts)
+vim.keymap.set({ "i", "c", "l" }, "<C-v>",   paste, opts)
+vim.keymap.set({ "i", "c", "l" }, "<S-Ins>", paste, opts)
+
+vim.keymap.set({ "t" }, "<D-v>", paste, topts)
+vim.keymap.set({ "t" }, "<M-v>", paste, topts)
+vim.keymap.set({ "t" }, "<C-v>", paste, topts)
+
+vim.keymap.set({ "n" }, "<D-v>",    paste, opts)
+vim.keymap.set({ "n" }, "<M-v>",    paste, opts)
+vim.keymap.set({ "n" }, "<S-Ins>",  paste, opts)
 
 vim.keymap.set({ "v" }, "<D-c>", '"+y')
 vim.keymap.set({ "v" }, "<M-c>", '"+y')
