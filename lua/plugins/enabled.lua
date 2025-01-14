@@ -138,6 +138,23 @@ local config = {
       },
     },
   },
+  {
+    "saghen/blink.cmp",
+    opts = function(_, opts)
+      opts.keymap = {
+        preset = "super-tab",
+        ["<S-Tab>"] = { "show", "select_prev", "fallback" },
+        ["<Tab>"] = { "show", "select_next", "fallback" },
+        ["<CR>"] = {
+          "accept",
+          "snippet_forward",
+          "fallback",
+        },
+        ["<C-y>"] = { "select_and_accept" },
+      }
+      return opts
+    end,
+  },
 }
 
 return config

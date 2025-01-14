@@ -51,18 +51,18 @@ vim.keymap.set("v", "<leader>ts", function()
   if vim.bo.filetype ~= "toggleterm" then
     require("toggleterm").toggle()
   end
-end)
+end, { desc = "Send selection to terminal" })
 
 vim.keymap.set("n", "<leader>ts", function()
   require("toggleterm").send_lines_to_terminal("single_line", trim_spaces, { args = vim.v.count })
   if vim.bo.filetype ~= "toggleterm" then
     require("toggleterm").toggle()
   end
-end)
+end, { desc = "Send signle line to terminal" })
 
 vim.keymap.set("v", "<leader>tl", function()
   require("toggleterm").send_lines_to_terminal("visual_lines", trim_spaces, { args = vim.v.count })
   if vim.bo.filetype ~= "toggleterm" then
     require("toggleterm").toggle()
   end
-end)
+end, { desc = "Send visual lines to terminal" })
